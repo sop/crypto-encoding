@@ -1,0 +1,28 @@
+{
+	"name": "sop/crypto-encoding",
+	"description": "A PHP implementation of textual encodings of cryptographic structures.",
+	"homepage": "https://github.com/sop/crypto-encoding",
+	"license": "MIT",
+	"type": "library",
+	"keywords": [
+		"pem",
+		"public key",
+		"private key",
+		"certificate"
+	],
+	"authors": [
+		{
+			"name": "Joni Eskelinen",
+			"email": "jonieske@gmail.com",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"php": ">=5.6.3"
+	},
+	"autoload": {
+		"psr-4": {
+			"Sop\\CryptoEncoding\\" : "lib/CryptoEncoding"
+		}
+	}
+}

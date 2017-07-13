@@ -132,7 +132,7 @@ class PEMBundle implements \Countable, \IteratorAggregate
      */
     public function string()
     {
-        return implode("\n", 
+        return implode("\n",
             array_map(
                 function (PEM $pem) {
                     return $pem->string();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sop\CryptoEncoding;
 
 /**
@@ -55,7 +57,7 @@ class PEM
      * @param string $type Content type
      * @param string $data Payload
      */
-    public function __construct($type, $data)
+    public function __construct(string $type, string $data)
     {
         $this->_type = $type;
         $this->_data = $data;
@@ -68,7 +70,7 @@ class PEM
      * @throws \UnexpectedValueException If string is not valid PEM
      * @return self
      */
-    public static function fromString($str)
+    public static function fromString(string $str)
     {
         if (!preg_match(self::PEM_REGEX, $str, $match)) {
             throw new \UnexpectedValueException("Not a PEM formatted string.");
@@ -88,7 +90,7 @@ class PEM
      * @throws \RuntimeException If file reading fails
      * @return self
      */
-    public static function fromFile($filename)
+    public static function fromFile(string $filename)
     {
         if (!is_readable($filename) ||
              false === ($str = file_get_contents($filename))) {
@@ -102,7 +104,7 @@ class PEM
      *
      * @return string
      */
-    public function type()
+    public function type(): string
     {
         return $this->_type;
     }
@@ -112,7 +114,7 @@ class PEM
      *
      * @return string
      */
-    public function data()
+    public function data(): string
     {
         return $this->_data;
     }
@@ -122,7 +124,7 @@ class PEM
      *
      * @return string
      */
-    public function string()
+    public function string(): string
     {
         return "-----BEGIN {$this->_type}-----\n" .
              trim(chunk_split(base64_encode($this->_data), 64, "\n")) . "\n" .

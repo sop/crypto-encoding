@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sop\CryptoEncoding;
 
 /**
@@ -33,7 +35,7 @@ class PEMBundle implements \Countable, \IteratorAggregate
      * @throws \UnexpectedValueException
      * @return self
      */
-    public static function fromString($str)
+    public static function fromString(string $str)
     {
         if (!preg_match_all(PEM::PEM_REGEX, $str, $matches, PREG_SET_ORDER)) {
             throw new \UnexpectedValueException("No PEM blocks.");
@@ -85,7 +87,7 @@ class PEMBundle implements \Countable, \IteratorAggregate
      *
      * @return PEM[]
      */
-    public function all()
+    public function all(): array
     {
         return $this->_pems;
     }
@@ -109,7 +111,7 @@ class PEMBundle implements \Countable, \IteratorAggregate
      * @see \Countable::count()
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->_pems);
     }
@@ -120,7 +122,7 @@ class PEMBundle implements \Countable, \IteratorAggregate
      * @see \IteratorAggregate::getIterator()
      * @return \ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->_pems);
     }
@@ -130,7 +132,7 @@ class PEMBundle implements \Countable, \IteratorAggregate
      *
      * @return string
      */
-    public function string()
+    public function string(): string
     {
         return implode("\n",
             array_map(

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 use Sop\CryptoEncoding\PEM;
 
 /**
@@ -19,7 +21,7 @@ class PEMTest extends PHPUnit_Framework_TestCase
      *
      * @return \Sop\CryptoEncoding\PEM
      */
-    public function testFromFile()
+    public function testFromFile(): PEM
     {
         $pem = PEM::fromFile(TEST_ASSETS_DIR . "/public_key.pem");
         $this->assertInstanceOf(PEM::class, $pem);

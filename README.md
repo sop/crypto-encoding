@@ -8,6 +8,10 @@
 A PHP implementation of [RFC 7468](https://tools.ietf.org/html/rfc7468)
 textual encodings of cryptographic structures _(PEM)_.
 
+## Requirements
+
+-   PHP >=7.0
+
 ## Installation
 
 This library is available on

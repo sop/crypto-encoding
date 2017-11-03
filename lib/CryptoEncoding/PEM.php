@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Sop\CryptoEncoding;
 
@@ -70,7 +70,7 @@ class PEM
      * @throws \UnexpectedValueException If string is not valid PEM
      * @return self
      */
-    public static function fromString(string $str)
+    public static function fromString(string $str): self
     {
         if (!preg_match(self::PEM_REGEX, $str, $match)) {
             throw new \UnexpectedValueException("Not a PEM formatted string.");
@@ -90,7 +90,7 @@ class PEM
      * @throws \RuntimeException If file reading fails
      * @return self
      */
-    public static function fromFile(string $filename)
+    public static function fromFile(string $filename): self
     {
         if (!is_readable($filename) ||
              false === ($str = file_get_contents($filename))) {

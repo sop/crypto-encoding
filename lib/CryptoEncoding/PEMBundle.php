@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Sop\CryptoEncoding;
 
@@ -35,7 +35,7 @@ class PEMBundle implements \Countable, \IteratorAggregate
      * @throws \UnexpectedValueException
      * @return self
      */
-    public static function fromString(string $str)
+    public static function fromString(string $str): self
     {
         if (!preg_match_all(PEM::PEM_REGEX, $str, $matches, PREG_SET_ORDER)) {
             throw new \UnexpectedValueException("No PEM blocks.");
@@ -60,7 +60,7 @@ class PEMBundle implements \Countable, \IteratorAggregate
      * @throws \RuntimeException If file reading fails
      * @return self
      */
-    public static function fromFile($filename)
+    public static function fromFile($filename): self
     {
         if (!is_readable($filename) ||
              false === ($str = file_get_contents($filename))) {
@@ -75,7 +75,7 @@ class PEMBundle implements \Countable, \IteratorAggregate
      * @param PEM ...$pems
      * @return self
      */
-    public function withPEMs(PEM ...$pems)
+    public function withPEMs(PEM ...$pems): self
     {
         $obj = clone $this;
         $obj->_pems = array_merge($obj->_pems, $pems);
@@ -98,7 +98,7 @@ class PEMBundle implements \Countable, \IteratorAggregate
      * @throws \LogicException If bundle contains no PEM objects
      * @return PEM
      */
-    public function first()
+    public function first(): PEM
     {
         if (!count($this->_pems)) {
             throw new \LogicException("No PEMs.");

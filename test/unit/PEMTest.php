@@ -1,33 +1,34 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types = 1);
+
+use PHPUnit\Framework\TestCase;
 use Sop\CryptoEncoding\PEM;
 
 /**
  * @group pem
+ *
+ * @internal
  */
-class PEMTest extends PHPUnit_Framework_TestCase
+class PEMTest extends TestCase
 {
-    /**
-     */
     public function testFromString()
     {
-        $str = file_get_contents(TEST_ASSETS_DIR . "/public_key.pem");
+        $str = file_get_contents(TEST_ASSETS_DIR . '/public_key.pem');
         $pem = PEM::fromString($str);
         $this->assertInstanceOf(PEM::class, $pem);
     }
-    
+
     /**
-     *
-     * @return \Sop\CryptoEncoding\PEM
+     * @return PEM
      */
     public function testFromFile(): PEM
     {
-        $pem = PEM::fromFile(TEST_ASSETS_DIR . "/public_key.pem");
+        $pem = PEM::fromFile(TEST_ASSETS_DIR . '/public_key.pem');
         $this->assertInstanceOf(PEM::class, $pem);
         return $pem;
     }
-    
+
     /**
      * @depends testFromFile
      *
@@ -37,50 +38,42 @@ class PEMTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(PEM::TYPE_PUBLIC_KEY, $pem->type());
     }
-    
-    /**
-     */
+
     public function testData()
     {
-        $data = "payload";
+        $data = 'payload';
         $encoded = base64_encode($data);
         $str = <<<DATA
 -----BEGIN TEST-----
-$encoded
+${encoded}
 -----END TEST-----
 DATA;
         $this->assertEquals($data, PEM::fromString($str)->data());
     }
-    
-    /**
-     * @expectedException UnexpectedValueException
-     */
+
     public function testInvalidPEM()
     {
-        PEM::fromString("invalid");
+        $this->expectException(UnexpectedValueException::class);
+        PEM::fromString('invalid');
     }
-    
-    /**
-     * @expectedException UnexpectedValueException
-     */
+
     public function testInvalidPEMData()
     {
-        $str = <<<DATA
+        $str = <<<'DATA'
 -----BEGIN TEST-----
 %%%
 -----END TEST-----
 DATA;
+        $this->expectException(UnexpectedValueException::class);
         PEM::fromString($str);
     }
-    
-    /**
-     * @expectedException RuntimeException
-     */
+
     public function testInvalidFile()
     {
-        PEM::fromFile(TEST_ASSETS_DIR . "/nonexistent");
+        $this->expectException(RuntimeException::class);
+        PEM::fromFile(TEST_ASSETS_DIR . '/nonexistent');
     }
-    
+
     /**
      * @depends testFromFile
      *
@@ -88,9 +81,9 @@ DATA;
      */
     public function testString(PEM $pem)
     {
-        $this->assertInternalType("string", $pem->string());
+        $this->assertIsString($pem->string());
     }
-    
+
     /**
      * @depends testFromFile
      *
@@ -98,6 +91,6 @@ DATA;
      */
     public function testToString(PEM $pem)
     {
-        $this->assertInternalType("string", strval($pem));
+        $this->assertIsString(strval($pem));
     }
 }

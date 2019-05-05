@@ -1,25 +1,28 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types = 1);
+
+use PHPUnit\Framework\TestCase;
 use Sop\CryptoEncoding\PEM;
 use Sop\CryptoEncoding\PEMBundle;
 
 /**
  * @group pem
+ *
+ * @internal
  */
-class PEMBundleTest extends PHPUnit_Framework_TestCase
+class PEMBundleTest extends TestCase
 {
     /**
-     *
      * @return PEMBundle
      */
     public function testBundle()
     {
-        $bundle = PEMBundle::fromFile(TEST_ASSETS_DIR . "/cacert.pem");
+        $bundle = PEMBundle::fromFile(TEST_ASSETS_DIR . '/cacert.pem');
         $this->assertInstanceOf(PEMBundle::class, $bundle);
         return $bundle;
     }
-    
+
     /**
      * @depends testBundle
      *
@@ -29,7 +32,7 @@ class PEMBundleTest extends PHPUnit_Framework_TestCase
     {
         $this->assertContainsOnlyInstancesOf(PEM::class, $bundle->all());
     }
-    
+
     /**
      * @depends testBundle
      *
@@ -39,7 +42,7 @@ class PEMBundleTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(PEM::class, $bundle->first());
     }
-    
+
     /**
      * @depends testBundle
      *
@@ -49,7 +52,7 @@ class PEMBundleTest extends PHPUnit_Framework_TestCase
     {
         $this->assertCount(150, $bundle);
     }
-    
+
     /**
      * @depends testBundle
      *
@@ -57,13 +60,13 @@ class PEMBundleTest extends PHPUnit_Framework_TestCase
      */
     public function testIterator(PEMBundle $bundle)
     {
-        $values = array();
+        $values = [];
         foreach ($bundle as $pem) {
             $values[] = $pem;
         }
         $this->assertContainsOnlyInstancesOf(PEM::class, $values);
     }
-    
+
     /**
      * @depends testBundle
      *
@@ -71,9 +74,9 @@ class PEMBundleTest extends PHPUnit_Framework_TestCase
      */
     public function testString(PEMBundle $bundle)
     {
-        $this->assertInternalType("string", $bundle->string());
+        $this->assertIsString($bundle->string());
     }
-    
+
     /**
      * @depends testBundle
      *
@@ -81,47 +84,39 @@ class PEMBundleTest extends PHPUnit_Framework_TestCase
      */
     public function testToString(PEMBundle $bundle)
     {
-        $this->assertInternalType("string", strval($bundle));
+        $this->assertIsString(strval($bundle));
     }
-    
-    /**
-     * @expectedException UnexpectedValueException
-     */
+
     public function testInvalidPEM()
     {
-        PEMBundle::fromString("invalid");
+        $this->expectException(UnexpectedValueException::class);
+        PEMBundle::fromString('invalid');
     }
-    
-    /**
-     * @expectedException UnexpectedValueException
-     */
+
     public function testInvalidPEMData()
     {
-        $str = <<<DATA
+        $str = <<<'DATA'
 -----BEGIN TEST-----
 %%%
 -----END TEST-----
 DATA;
+        $this->expectException(UnexpectedValueException::class);
         PEMBundle::fromString($str);
     }
-    
-    /**
-     * @expectedException RuntimeException
-     */
+
     public function testInvalidFile()
     {
-        PEMBundle::fromFile(TEST_ASSETS_DIR . "/nonexistent");
+        $this->expectException(RuntimeException::class);
+        PEMBundle::fromFile(TEST_ASSETS_DIR . '/nonexistent');
     }
-    
-    /**
-     * @expectedException LogicException
-     */
+
     public function testFirstEmptyFail()
     {
         $bundle = new PEMBundle();
+        $this->expectException(LogicException::class);
         $bundle->first();
     }
-    
+
     /**
      * @depends testBundle
      *
@@ -129,7 +124,7 @@ DATA;
      */
     public function testWithPEMs(PEMBundle $bundle)
     {
-        $bundle = $bundle->withPEMs(new PEM("TEST", "data"));
+        $bundle = $bundle->withPEMs(new PEM('TEST', 'data'));
         $this->assertCount(151, $bundle);
     }
 }

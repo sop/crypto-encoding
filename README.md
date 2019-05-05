@@ -10,7 +10,7 @@ textual encodings of cryptographic structures _(PEM)_.
 
 ## Requirements
 
--   PHP >=7.0
+-   PHP >=7.2
 
 ## Installation
 

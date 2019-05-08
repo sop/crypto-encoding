@@ -25,7 +25,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Sop\\CryptoEncoding\\": "lib/CryptoEncoding"
+            "Sop\\CryptoEncoding\\": "lib/CryptoEncoding/"
         }
     }
 }

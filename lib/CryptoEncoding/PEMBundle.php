@@ -76,7 +76,7 @@ class PEMBundle implements \Countable, \IteratorAggregate
     {
         if (!is_readable($filename) ||
             false === ($str = file_get_contents($filename))) {
-            throw new \RuntimeException("Failed to read ${filename}.");
+            throw new \RuntimeException("Failed to read {$filename}.");
         }
         return self::fromString($str);
     }

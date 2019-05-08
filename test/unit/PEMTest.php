@@ -45,7 +45,7 @@ class PEMTest extends TestCase
         $encoded = base64_encode($data);
         $str = <<<DATA
 -----BEGIN TEST-----
-${encoded}
+{$encoded}
 -----END TEST-----
 DATA;
         $this->assertEquals($data, PEM::fromString($str)->data());

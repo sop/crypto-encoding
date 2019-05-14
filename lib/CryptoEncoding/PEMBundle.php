@@ -31,7 +31,7 @@ class PEMBundle implements \Countable, \IteratorAggregate
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->string();
     }
@@ -72,7 +72,7 @@ class PEMBundle implements \Countable, \IteratorAggregate
      *
      * @return self
      */
-    public static function fromFile($filename): self
+    public static function fromFile(string $filename): self
     {
         if (!is_readable($filename) ||
             false === ($str = file_get_contents($filename))) {

@@ -1,16 +1,16 @@
-[![Build Status](https://travis-ci.org/sop/crypto-encoding.svg?branch=master)](https://travis-ci.org/sop/crypto-encoding)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sop/crypto-encoding/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sop/crypto-encoding/?branch=master)
-[![Coverage Status](https://coveralls.io/repos/github/sop/crypto-encoding/badge.svg?branch=master)](https://coveralls.io/github/sop/crypto-encoding?branch=master)
-[![License](https://poser.pugx.org/sop/crypto-encoding/license)](https://github.com/sop/crypto-encoding/blob/master/LICENSE)
-
 # CryptoEncoding
+
+[![Build Status](https://travis-ci.org/sop/crypto-encoding.svg?branch=php70)](https://travis-ci.org/sop/crypto-encoding)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sop/crypto-encoding/badges/quality-score.png?b=php70)](https://scrutinizer-ci.com/g/sop/crypto-encoding/?branch=php70)
+[![Coverage Status](https://coveralls.io/repos/github/sop/crypto-encoding/badge.svg?branch=php70)](https://coveralls.io/github/sop/crypto-encoding?branch=php70)
+[![License](https://poser.pugx.org/sop/crypto-encoding/license)](https://github.com/sop/crypto-encoding/blob/php70/LICENSE)
 
 A PHP implementation of [RFC 7468](https://tools.ietf.org/html/rfc7468)
 textual encodings of cryptographic structures _(PEM)_.
 
 ## Requirements
 
--   PHP >=7.0
+- PHP >=7.0
 
 ## Installation
 

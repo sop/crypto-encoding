@@ -41,6 +41,18 @@ class PEMBundleTest extends TestCase
     public function testFirst(PEMBundle $bundle)
     {
         $this->assertInstanceOf(PEM::class, $bundle->first());
+        $this->assertEquals($bundle->all()[0], $bundle->first());
+    }
+
+    /**
+     * @depends testBundle
+     *
+     * @param PEMBundle $bundle
+     */
+    public function testLast(PEMBundle $bundle)
+    {
+        $this->assertInstanceOf(PEM::class, $bundle->last());
+        $this->assertEquals($bundle->all()[149], $bundle->last());
     }
 
     /**
@@ -115,6 +127,13 @@ DATA;
         $bundle = new PEMBundle();
         $this->expectException(LogicException::class);
         $bundle->first();
+    }
+
+    public function testLastEmptyFail()
+    {
+        $bundle = new PEMBundle();
+        $this->expectException(LogicException::class);
+        $bundle->last();
     }
 
     /**

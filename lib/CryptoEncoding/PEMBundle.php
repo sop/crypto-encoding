@@ -121,6 +121,21 @@ class PEMBundle implements \Countable, \IteratorAggregate
     }
 
     /**
+     * Get the last PEM in a bundle.
+     *
+     * @throws \LogicException If bundle contains no PEM objects
+     *
+     * @return PEM
+     */
+    public function last(): PEM
+    {
+        if (!count($this->_pems)) {
+            throw new \LogicException('No PEMs.');
+        }
+        return $this->_pems[count($this->_pems) - 1];
+    }
+
+    /**
      * @see \Countable::count()
      *
      * @return int

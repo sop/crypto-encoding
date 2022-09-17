@@ -1,10 +1,15 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
+namespace Sop\CryptoEncoding\Test;
+
+use LogicException;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Sop\CryptoEncoding\PEM;
 use Sop\CryptoEncoding\PEMBundle;
+use UnexpectedValueException;
 
 /**
  * @group pem
@@ -14,9 +19,9 @@ use Sop\CryptoEncoding\PEMBundle;
 class PEMBundleTest extends TestCase
 {
     /**
-     * @return PEMBundle
+     * @return \Sop\CryptoEncoding\PEMBundle
      */
-    public function testBundle()
+    public function testBundle(): PEMBundle
     {
         $bundle = PEMBundle::fromFile(TEST_ASSETS_DIR . '/cacert.pem');
         $this->assertInstanceOf(PEMBundle::class, $bundle);
@@ -26,9 +31,9 @@ class PEMBundleTest extends TestCase
     /**
      * @depends testBundle
      *
-     * @param PEMBundle $bundle
+     * @param \Sop\CryptoEncoding\PEMBundle $bundle
      */
-    public function testAll(PEMBundle $bundle)
+    public function testAll(PEMBundle $bundle): void
     {
         $this->assertContainsOnlyInstancesOf(PEM::class, $bundle->all());
     }
@@ -36,9 +41,9 @@ class PEMBundleTest extends TestCase
     /**
      * @depends testBundle
      *
-     * @param PEMBundle $bundle
+     * @param \Sop\CryptoEncoding\PEMBundle $bundle
      */
-    public function testFirst(PEMBundle $bundle)
+    public function testFirst(PEMBundle $bundle): void
     {
         $this->assertInstanceOf(PEM::class, $bundle->first());
         $this->assertEquals($bundle->all()[0], $bundle->first());
@@ -47,9 +52,9 @@ class PEMBundleTest extends TestCase
     /**
      * @depends testBundle
      *
-     * @param PEMBundle $bundle
+     * @param \Sop\CryptoEncoding\PEMBundle $bundle
      */
-    public function testLast(PEMBundle $bundle)
+    public function testLast(PEMBundle $bundle): void
     {
         $this->assertInstanceOf(PEM::class, $bundle->last());
         $this->assertEquals($bundle->all()[149], $bundle->last());
@@ -58,9 +63,9 @@ class PEMBundleTest extends TestCase
     /**
      * @depends testBundle
      *
-     * @param PEMBundle $bundle
+     * @param \Sop\CryptoEncoding\PEMBundle $bundle
      */
-    public function testCount(PEMBundle $bundle)
+    public function testCount(PEMBundle $bundle): void
     {
         $this->assertCount(150, $bundle);
     }
@@ -68,9 +73,9 @@ class PEMBundleTest extends TestCase
     /**
      * @depends testBundle
      *
-     * @param PEMBundle $bundle
+     * @param \Sop\CryptoEncoding\PEMBundle $bundle
      */
-    public function testIterator(PEMBundle $bundle)
+    public function testIterator(PEMBundle $bundle): void
     {
         $values = [];
         foreach ($bundle as $pem) {
@@ -82,9 +87,9 @@ class PEMBundleTest extends TestCase
     /**
      * @depends testBundle
      *
-     * @param PEMBundle $bundle
+     * @param \Sop\CryptoEncoding\PEMBundle $bundle
      */
-    public function testString(PEMBundle $bundle)
+    public function testString(PEMBundle $bundle): void
     {
         $this->assertIsString($bundle->string());
     }
@@ -92,20 +97,20 @@ class PEMBundleTest extends TestCase
     /**
      * @depends testBundle
      *
-     * @param PEMBundle $bundle
+     * @param \Sop\CryptoEncoding\PEMBundle $bundle
      */
-    public function testToString(PEMBundle $bundle)
+    public function testToString(PEMBundle $bundle): void
     {
         $this->assertIsString(strval($bundle));
     }
 
-    public function testInvalidPEM()
+    public function testInvalidPEM(): void
     {
         $this->expectException(UnexpectedValueException::class);
         PEMBundle::fromString('invalid');
     }
 
-    public function testInvalidPEMData()
+    public function testInvalidPEMData(): void
     {
         $str = <<<'DATA'
 -----BEGIN TEST-----
@@ -116,20 +121,20 @@ DATA;
         PEMBundle::fromString($str);
     }
 
-    public function testInvalidFile()
+    public function testInvalidFile(): void
     {
         $this->expectException(RuntimeException::class);
         PEMBundle::fromFile(TEST_ASSETS_DIR . '/nonexistent');
     }
 
-    public function testFirstEmptyFail()
+    public function testFirstEmptyFail(): void
     {
         $bundle = new PEMBundle();
         $this->expectException(LogicException::class);
         $bundle->first();
     }
 
-    public function testLastEmptyFail()
+    public function testLastEmptyFail(): void
     {
         $bundle = new PEMBundle();
         $this->expectException(LogicException::class);
@@ -139,7 +144,7 @@ DATA;
     /**
      * @depends testBundle
      *
-     * @param PEMBundle $bundle
+     * @param \Sop\CryptoEncoding\PEMBundle $bundle
      */
     public function testWithPEMs(PEMBundle $bundle)
     {

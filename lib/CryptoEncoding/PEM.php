@@ -1,8 +1,19 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Sop\CryptoEncoding;
+
+use RuntimeException;
+use UnexpectedValueException;
+
+use function base_decode;
+use function base_encode;
+use function chunk_split;
+use function file_get_contents;
+use function is_readable;
+use function preg_match;
+use function trim;
 
 /**
  * Implements PEM file encoding and decoding.
@@ -12,44 +23,45 @@ namespace Sop\CryptoEncoding;
 class PEM
 {
     // well-known PEM types
-    const TYPE_CERTIFICATE = 'CERTIFICATE';
-    const TYPE_CRL = 'X509 CRL';
-    const TYPE_CERTIFICATE_REQUEST = 'CERTIFICATE REQUEST';
-    const TYPE_ATTRIBUTE_CERTIFICATE = 'ATTRIBUTE CERTIFICATE';
-    const TYPE_PRIVATE_KEY = 'PRIVATE KEY';
-    const TYPE_PUBLIC_KEY = 'PUBLIC KEY';
-    const TYPE_ENCRYPTED_PRIVATE_KEY = 'ENCRYPTED PRIVATE KEY';
-    const TYPE_RSA_PRIVATE_KEY = 'RSA PRIVATE KEY';
-    const TYPE_RSA_PUBLIC_KEY = 'RSA PUBLIC KEY';
-    const TYPE_EC_PRIVATE_KEY = 'EC PRIVATE KEY';
-    const TYPE_PKCS7 = 'PKCS7';
-    const TYPE_CMS = 'CMS';
+    public const TYPE_CERTIFICATE = 'CERTIFICATE';
+    public const TYPE_CRL = 'X509 CRL';
+    public const TYPE_CERTIFICATE_REQUEST = 'CERTIFICATE REQUEST';
+    public const TYPE_ATTRIBUTE_CERTIFICATE = 'ATTRIBUTE CERTIFICATE';
+    public const TYPE_PRIVATE_KEY = 'PRIVATE KEY';
+    public const TYPE_PUBLIC_KEY = 'PUBLIC KEY';
+    public const TYPE_ENCRYPTED_PRIVATE_KEY = 'ENCRYPTED PRIVATE KEY';
+    public const TYPE_RSA_PRIVATE_KEY = 'RSA PRIVATE KEY';
+    public const TYPE_RSA_PUBLIC_KEY = 'RSA PUBLIC KEY';
+    public const TYPE_EC_PRIVATE_KEY = 'EC PRIVATE KEY';
+    public const TYPE_PKCS7 = 'PKCS7';
+    public const TYPE_CMS = 'CMS';
 
     /**
      * Regular expression to match PEM block.
      *
      * @var string
      */
-    const PEM_REGEX = '/' .
+    public const PEM_REGEX =
+         '/' .
         /* line start */ '(?:^|[\r\n])' .
         /* header */     '-----BEGIN (.+?)-----[\r\n]+' .
         /* payload */    '(.+?)' .
         /* trailer */    '[\r\n]+-----END \\1-----' .
-    '/ms';
+        '/ms';
 
     /**
      * Content type.
      *
      * @var string
      */
-    protected $_type;
+    protected $type;
 
     /**
      * Payload.
      *
      * @var string
      */
-    protected $_data;
+    protected $data;
 
     /**
      * Constructor.
@@ -59,8 +71,8 @@ class PEM
      */
     public function __construct(string $type, string $data)
     {
-        $this->_type = $type;
-        $this->_data = $data;
+        $this->type = $type;
+        $this->data = $data;
     }
 
     /**
@@ -83,12 +95,12 @@ class PEM
     public static function fromString(string $str): self
     {
         if (!preg_match(self::PEM_REGEX, $str, $match)) {
-            throw new \UnexpectedValueException('Not a PEM formatted string.');
+            throw new UnexpectedValueException('Not a PEM formatted string.');
         }
         $payload = preg_replace('/\s+/', '', $match[2]);
         $data = base64_decode($payload, true);
         if (false === $data) {
-            throw new \UnexpectedValueException('Failed to decode PEM data.');
+            throw new UnexpectedValueException('Failed to decode PEM data.');
         }
         return new self($match[1], $data);
     }
@@ -104,9 +116,11 @@ class PEM
      */
     public static function fromFile(string $filename): self
     {
-        if (!is_readable($filename) ||
-            false === ($str = file_get_contents($filename))) {
-            throw new \RuntimeException("Failed to read {$filename}.");
+        if (
+            !is_readable($filename) ||
+            false === ($str = file_get_contents($filename))
+        ) {
+            throw new RuntimeException("Failed to read {$filename}.");
         }
         return self::fromString($str);
     }
@@ -118,7 +132,7 @@ class PEM
      */
     public function type(): string
     {
-        return $this->_type;
+        return $this->type;
     }
 
     /**
@@ -128,7 +142,7 @@ class PEM
      */
     public function data(): string
     {
-        return $this->_data;
+        return $this->data;
     }
 
     /**
@@ -138,8 +152,13 @@ class PEM
      */
     public function string(): string
     {
-        return "-----BEGIN {$this->_type}-----\n" .
-            trim(chunk_split(base64_encode($this->_data), 64, "\n")) . "\n" .
-            "-----END {$this->_type}-----";
+        return sprintf(
+            "-----BEGIN %s-----\n' .
+            '%s\n' .
+            '-----END %s-----",
+            $this->type,
+            trim(chunk_split(base64_encode($this->data), 64, "\n")),
+            $this->type
+        );
     }
 }

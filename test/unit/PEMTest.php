@@ -1,9 +1,16 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
+
+namespace Sop\CryptoEncoding\Test;
 
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Sop\CryptoEncoding\PEM;
+use UnexpectedValueException;
+
+use function base64_encode;
+use function file_get_contents;
 
 /**
  * @group pem
@@ -12,7 +19,7 @@ use Sop\CryptoEncoding\PEM;
  */
 class PEMTest extends TestCase
 {
-    public function testFromString()
+    public function testFromString(): void
     {
         $str = file_get_contents(TEST_ASSETS_DIR . '/public_key.pem');
         $pem = PEM::fromString($str);
@@ -20,7 +27,7 @@ class PEMTest extends TestCase
     }
 
     /**
-     * @return PEM
+     * @return \Sop\CryptoEncoding\PEM
      */
     public function testFromFile(): PEM
     {
@@ -32,14 +39,14 @@ class PEMTest extends TestCase
     /**
      * @depends testFromFile
      *
-     * @param PEM $pem
+     * @return \Sop\CryptoEncoding\PEM
      */
-    public function testType(PEM $pem)
+    public function testType(PEM $pem): void
     {
         $this->assertEquals(PEM::TYPE_PUBLIC_KEY, $pem->type());
     }
 
-    public function testData()
+    public function testData(): void
     {
         $data = 'payload';
         $encoded = base64_encode($data);
@@ -51,13 +58,13 @@ DATA;
         $this->assertEquals($data, PEM::fromString($str)->data());
     }
 
-    public function testInvalidPEM()
+    public function testInvalidPEM(): void
     {
         $this->expectException(UnexpectedValueException::class);
         PEM::fromString('invalid');
     }
 
-    public function testInvalidPEMData()
+    public function testInvalidPEMData(): void
     {
         $str = <<<'DATA'
 -----BEGIN TEST-----
@@ -68,7 +75,7 @@ DATA;
         PEM::fromString($str);
     }
 
-    public function testInvalidFile()
+    public function testInvalidFile(): void
     {
         $this->expectException(RuntimeException::class);
         PEM::fromFile(TEST_ASSETS_DIR . '/nonexistent');
@@ -77,9 +84,9 @@ DATA;
     /**
      * @depends testFromFile
      *
-     * @param PEM $pem
+     * @param \Sop\CryptoEncoding\PEM $pem
      */
-    public function testString(PEM $pem)
+    public function testString(PEM $pem): void
     {
         $this->assertIsString($pem->string());
     }
@@ -87,9 +94,9 @@ DATA;
     /**
      * @depends testFromFile
      *
-     * @param PEM $pem
+     * @param \Sop\CryptoEncoding\PEM $pem
      */
-    public function testToString(PEM $pem)
+    public function testToString(PEM $pem): void
     {
         $this->assertIsString(strval($pem));
     }

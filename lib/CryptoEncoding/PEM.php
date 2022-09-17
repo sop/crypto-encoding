@@ -152,8 +152,13 @@ class PEM
      */
     public function string(): string
     {
-        return "-----BEGIN {$this->type}-----\n" .
-            trim(chunk_split(base64_encode($this->data), 64, "\n")) . "\n" .
-            "-----END {$this->type}-----";
+        return sprintf(
+            "-----BEGIN %s-----\n' .
+            '%s\n' .
+            '-----END %s-----",
+            $this->type,
+            trim(chunk_split(base64_encode($this->data), 64, "\n")),
+            $this->type
+        );
     }
 }
